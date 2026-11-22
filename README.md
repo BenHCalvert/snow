@@ -2,6 +2,9 @@
 
 **Where's the best snow I can drive to, and how does it compare to normal?**
 
+*Long-term vision: "Where's the best snow, **that's safe to ski**, within X hours of me, and how does it compare to normal?"
+(see the [roadmap](docs/PRODUCT.md#roadmap)).*
+
 A map of every SNOTEL snow station in the western US, filtered by how far you're willing to drive and
 ranked by snow depth, new snow, or percent of normal. Data refreshes every 3 hours from the NRCS.
 

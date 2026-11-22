@@ -8,6 +8,13 @@ No single tool answers the question they actually have:
 
 > **"Where's the best snow I can drive to, and how does it compare to normal?"**
 
+### Long-term vision
+
+> **"Where's the best snow, that's safe to ski, within X hours of me, and how does it compare to normal?"**
+
+V1 answers the snow and distance parts. Later phases add conditions (freeze/thaw, forecast) and then safety
+(avalanche danger). See the [Roadmap](#roadmap).
+
 The NRCS tools are built for hydrologists (water supply, basins, percent of median). They're accurate but
 don't account for *where the user is* or *how far they're willing to drive*.
 
@@ -42,8 +49,9 @@ don't account for *where the user is* or *how far they're willing to drive*.
 | Cut | Why |
 |---|---|
 | Drive time from the user's exact location | Needs a live routing call per visitor. The free router can't take that load, and hubs cover most users. See DECISIONS #2. |
-| Avalanche danger | Must come from avalanche centers with care and attribution. Showing it wrong is a safety risk. |
-| Weather forecast | High value, but a separate integration. It's the top V2 candidate. |
+| Avalanche danger | Must come from avalanche centers with care and attribution. Showing it wrong is a safety risk. Planned as Phase 3 (see Roadmap and DECISIONS #8). |
+| Weather forecast | High value, but a separate integration. Planned for Phase 1. |
+| Freeze/thaw / crust flag | Needs hourly temperature data, while V1 is daily only. Planned for Phase 1. |
 | Winter road closures | No reliable cross-state source. Flagged in the UI copy instead. |
 | Accounts, favorites, alerts | No evidence of need yet. Shareable URLs cover "save this view." |
 
@@ -70,9 +78,35 @@ Analytics are not wired in yet. Adding privacy-friendly page analytics (e.g., Pl
 
 ## Roadmap
 
-1. **V1.1:** analytics, NWS 3-day forecast snow per site, "new snow (24h)" from hourly data
-2. **V2:** "this date in history" (compare any date across 40+ seasons), freeze/thaw/crust indicator
-3. **V3:** user location via precomputed isochrones, storm alerts ("8"+ within 3 h of you")
+Phases build toward the long-term vision: **snow → conditions → safety**.
+
+### Phase 1: Conditions ("what will it ski like?")
+| Feature | Notes | Depends on |
+|---|---|---|
+| **72-hour new snow from hourly data** (`metric=new72`) | Replaces the V1 3-day *daily* depth change. Sum hourly depth gains, smoothed to ignore ±1" sensor jitter, and cross-check with SWE gain. Also 24 h and 48 h. | Pipeline: hourly SNWD/WTEQ fetch |
+| **Shareable links for the new metric** | URL state already ships in V1 (`?from=&hours=&metric=&site=`). Add `new72` (and `new24`/`new48`) as valid `metric` values, and keep old links working. | 72 h new snow |
+| **Freeze/thaw / crust flag** | From hourly air temperature: flag sites where it went above 32°F then back below within the last 72 h (likely melt-freeze crust), with hours above freezing as the strength. Show as a badge on the list and the detail view. Copy should say "likely crust at the sensor," not a slope guarantee. | Pipeline: hourly TOBS fetch |
+| **NWS forecast per site** | Use the National Weather Service API (`api.weather.gov`, free, no key) gridpoint forecast at each station's lat/lon: next 3 days of snow amount, temperature high/low, and wind. Show "forecast new snow (3 days)" as a ranking option. Precompute in the scheduled job so the site stays static. | Pipeline: NWS integration, caching gridpoint lookups |
+| Analytics | Privacy-friendly page analytics to measure the success metrics above. | — |
+
+### Phase 2: History and reach
+- "This date in history": compare any date across 40+ seasons
+- User location instead of hub cities (precomputed isochrone grid)
+- Storm alerts ("8"+ new snow within 3 h of you")
+
+### Phase 3: Safety ("is it safe to ski?")
+Completes the vision: **the best snow that's safe to ski, within X hours of me, compared to normal.**
+| Feature | Notes |
+|---|---|
+| **Avalanche danger overlay** | Show the current danger rating from regional avalanche centers (e.g., via the National Avalanche Center / avalanche.org forecast zones) as a map layer under the stations. Each station inherits the danger rating of its forecast zone. |
+| **Rank by snow *and* safety** | Option to hide or de-rank sites in zones at Considerable or higher, and to show "best snow at Low/Moderate danger." |
+| **Avalanche weather context** | Combine Phase 1 signals that matter for stability: recent loading (72 h new snow and SWE), wind from the forecast, and warming or crust. Present them as *context next to the official forecast*, never as our own danger rating. |
+| **Required guardrails** | Always link to the full avalanche center forecast. Show issue date and expiration, and gray out expired forecasts. Show "no forecast available" rather than nothing. Credit the centers clearly. Add a prominent disclaimer: this tool does not replace reading the forecast, training, or field observations. |
+
+Open questions for Phase 3 (to resolve in user research and with avalanche centers):
+- Do avalanche centers permit this kind of reuse, and what attribution do they require?
+- Does showing danger next to "best snow" encourage risky choices? Test the framing with users.
+- How do we handle stations outside any forecast zone, and forecasts issued only some days of the week?
 
 See [DECISIONS.md](DECISIONS.md) for the reasoning behind key choices, and [USER_RESEARCH.md](USER_RESEARCH.md)
 for the interview plan.

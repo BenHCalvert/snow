@@ -46,3 +46,21 @@ showing old data would mislead them.
 ### 7. Free, keyless map tiles (OpenFreeMap + MapLibre)
 **Decision:** MapLibre GL with OpenFreeMap vector tiles. No API key, no billing, no usage caps.
 **Trade-offs:** Less polished terrain styling than Mapbox. A terrain/hillshade layer is a likely V2 polish item.
+
+### 8. Avalanche danger: show the official forecast, never compute our own *(planned, Phase 3)*
+**Context:** The long-term vision adds "that's safe to ski." Avalanche danger is life-safety information, issued by
+trained forecasters for specific zones and dates.
+**Decision:** When we add it, display the official avalanche center rating for the station's forecast zone,
+link to the full forecast, and show the issue and expiration dates. Our own signals (new snow, wind, warming) appear only
+as *context* beside the official rating. They are never combined into a score that looks like a danger rating.
+**Trade-offs:** Less "magic" than a single safety score, and coverage is limited to forecast zones and forecast days.
+In exchange, we don't put out a misleading safety claim, and we respect the forecasters' work.
+**Revisit when:** never for the core principle. The presentation details get revisited after user testing
+and conversations with avalanche centers.
+
+### 9. Phase 1 adds hourly data to the pipeline
+**Context:** 72-hour new snow and the freeze/thaw flag both need hourly SNOTEL data. V1 fetches daily data only.
+**Decision (planned):** Fetch the last 96 hours of hourly SNWD, WTEQ, and TOBS for all stations in the scheduled job,
+and compute the metrics in `pipeline/metrics.py` with unit tests (sensor-jitter smoothing, missing hours).
+**Trade-offs:** It adds roughly a few minutes to each scheduled run and makes the pipeline more complex. It's still well
+within GitHub Actions limits.
