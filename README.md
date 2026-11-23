@@ -69,6 +69,7 @@ Tip: `python3 pipeline/build_data.py --states ID,OR` builds a smaller dataset in
 - Snow data: [USDA NRCS SNOTEL](https://www.nrcs.usda.gov/wps/portal/wcc/home/) via the AWDB REST API (public domain)
 - Drive times: [OSRM](https://project-osrm.org/) on OpenStreetMap data, summer road network (check winter closures!)
 - Basemap: [OpenFreeMap](https://openfreemap.org/) / [OpenMapTiles](https://openmaptiles.org/) © OpenStreetMap contributors
+- Shaded relief: [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (USGS 3DEP, SRTM, and other public elevation data)
 
 *SNOTEL stations measure snow at a single point, usually a sheltered clearing. Use this to decide where to look,
 not as a statement about avalanche or slope conditions. Always check your local avalanche center.*

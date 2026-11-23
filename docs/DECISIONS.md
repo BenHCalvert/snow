@@ -45,7 +45,7 @@ showing old data would mislead them.
 
 ### 7. Free, keyless map tiles (OpenFreeMap + MapLibre)
 **Decision:** MapLibre GL with OpenFreeMap vector tiles. No API key, no billing, no usage caps.
-**Trade-offs:** Less polished terrain styling than Mapbox. A terrain/hillshade layer is a likely V2 polish item.
+**Trade-offs:** Less polished terrain styling than Mapbox. Shaded relief comes from the free AWS Terrain Tiles (terrarium DEM), drawn as a MapLibre hillshade layer under Positron's labels; markers use dark outlines and multi-hue ramps (viridis, RdYlBu) so they stand out from the gray basemap.
 
 ### 8. Avalanche danger: show the official forecast, never compute our own *(planned, Phase 3)*
 **Context:** The long-term vision adds "that's safe to ski." Avalanche danger is life-safety information, issued by
