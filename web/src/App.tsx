@@ -48,7 +48,6 @@ export default function App() {
       <aside className="panel">
         <header className="brand">
           <h1>❄️ Snow Within Reach</h1>
-          <p className="muted">Where's the best snow I can drive to, and how does it compare to normal?</p>
         </header>
 
         <div className="controls">

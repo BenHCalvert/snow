@@ -17,7 +17,8 @@ export const METRICS: Record<MetricKey, Metric> = {
     label: "Snow depth",
     short: "Depth",
     unit: '"',
-    stops: [[0, "#d9d4cc"], [3, "#c6dbef"], [12, "#6baed6"], [24, "#2171b5"], [48, "#08306b"]],
+    // Viridis: yellow → green → blue → purple. Colorblind-safe and stays clear of the gray basemap.
+    stops: [[0, "#fde725"], [3, "#5ec962"], [12, "#21918c"], [24, "#3b528b"], [48, "#440154"]],
     format: (s) => (s.depth == null ? "–" : `${s.depth}"`),
     help: "Current snow depth at the sensor, in inches.",
   },
@@ -25,7 +26,7 @@ export const METRICS: Record<MetricKey, Metric> = {
     label: "New snow (3 days)",
     short: "3-day",
     unit: '"',
-    stops: [[-99, "#d9d4cc"], [1, "#c7e9c0"], [3, "#74c476"], [6, "#31a354"], [12, "#006d2c"]],
+    stops: [[-99, "#fde725"], [1, "#5ec962"], [3, "#21918c"], [6, "#3b528b"], [12, "#440154"]],
     format: (s) => signed(s.dDepth3, '"'),
     help: "Change in snow depth over the last 3 days. Small changes (±1\") are often sensor noise or settling.",
   },
@@ -33,7 +34,8 @@ export const METRICS: Record<MetricKey, Metric> = {
     label: "% of normal (SWE)",
     short: "% med",
     unit: "%",
-    stops: [[0, "#b2182b"], [50, "#ef8a62"], [90, "#e7e1d8"], [110, "#67a9cf"], [150, "#2166ac"]],
+    // RdYlBu: the "normal" band is pale yellow, not a gray that disappears into the basemap.
+    stops: [[0, "#d73027"], [50, "#fc8d59"], [90, "#fee090"], [110, "#91bfdb"], [150, "#4575b4"]],
     format: (s) => (s.pctMed == null ? "–" : `${s.pctMed}%`),
     help: "Snow water equivalent compared with the 1991–2020 median for today's date.",
   },

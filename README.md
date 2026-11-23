@@ -35,11 +35,11 @@ This project is a case study in going from a personal pain point to a scoped, sh
 
 ```
 NRCS AWDB API ──(every 3 h, GitHub Actions)──▶ pipeline/build_data.py ──▶ static JSON ──▶ React + MapLibre site (GitHub Pages)
-OSRM router ──(one-time)──▶ pipeline/build_drive_times.py ──▶ drive times from 15 hub cities (committed)
+OSRM router ──(one-time)──▶ pipeline/build_drive_times.py ──▶ drive times from 17 hub cities (committed)
 ```
 
 - **No backend, $0 to run.** A scheduled GitHub Action fetches data for ~840 stations, writes JSON, and deploys.
-- **Drive times are precomputed** from 15 mountain-west cities, so the live site never depends on a routing service.
+- **Drive times are precomputed** from 17 mountain-west cities, so the live site never depends on a routing service.
 - **Data quality is handled explicitly:** stale stations fade out, sensor noise is explained in the UI, and the metric
   logic is unit-tested (`pipeline/tests`).
 
@@ -47,7 +47,7 @@ OSRM router ──(one-time)──▶ pipeline/build_drive_times.py ──▶ dr
 
 ```bash
 python3 pipeline/build_data.py                 # ~5 min; writes web/public/data/
-# (optional, slow) python3 pipeline/build_drive_times.py   # rebuild drive times
+# python3 pipeline/build_drive_times.py   # drive times for new hubs only (--all rebuilds every hub, slow)
 cd web && npm install && npm run dev           # http://localhost:5173
 python3 -m unittest discover -s pipeline/tests # tests
 ```
@@ -69,6 +69,7 @@ Tip: `python3 pipeline/build_data.py --states ID,OR` builds a smaller dataset in
 - Snow data: [USDA NRCS SNOTEL](https://www.nrcs.usda.gov/wps/portal/wcc/home/) via the AWDB REST API (public domain)
 - Drive times: [OSRM](https://project-osrm.org/) on OpenStreetMap data, summer road network (check winter closures!)
 - Basemap: [OpenFreeMap](https://openfreemap.org/) / [OpenMapTiles](https://openmaptiles.org/) © OpenStreetMap contributors
+- Shaded relief: [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (USGS 3DEP, SRTM, and other public elevation data)
 
 *SNOTEL stations measure snow at a single point, usually a sheltered clearing. Use this to decide where to look,
 not as a statement about avalanche or slope conditions. Always check your local avalanche center.*

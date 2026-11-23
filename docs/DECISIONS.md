@@ -11,10 +11,10 @@ Short records of product and technical decisions: what we chose, what we gave up
 nothing needs to stay up, pages load fast, and NRCS sees one request batch every 3 hours instead of one per visitor.
 **Revisit when:** we need per-user features (alerts, accounts).
 
-### 2. Drive times from 15 hub cities instead of the user's location
+### 2. Drive times from 17 hub cities instead of the user's location
 **Context:** Real drive times need a routing engine. The free OSRM demo server is rate-limited and not meant for
 production traffic, and paid routing APIs cost money per request.
-**Decision:** Precompute drive times from 15 mountain-west hubs to every station within 8 hours, and commit the result.
+**Decision:** Precompute drive times from 17 mountain-west hubs to every station within 8 hours, and commit the result.
 **Trade-offs:** Users outside a hub are approximated (Eagle uses Boise). This covers most of the population
 that skis in the region, at zero ongoing cost.
 **Revisit when:** analytics show many users far from hubs, or users request it. Option: precomputed isochrone
@@ -45,7 +45,7 @@ showing old data would mislead them.
 
 ### 7. Free, keyless map tiles (OpenFreeMap + MapLibre)
 **Decision:** MapLibre GL with OpenFreeMap vector tiles. No API key, no billing, no usage caps.
-**Trade-offs:** Less polished terrain styling than Mapbox. A terrain/hillshade layer is a likely V2 polish item.
+**Trade-offs:** Less polished terrain styling than Mapbox. Shaded relief comes from the free AWS Terrain Tiles (terrarium DEM), drawn as a MapLibre hillshade layer under Positron's labels; markers use dark outlines and multi-hue ramps (viridis, RdYlBu) so they stand out from the gray basemap.
 
 ### 8. Avalanche danger: show the official forecast, never compute our own *(planned, Phase 3)*
 **Context:** The long-term vision adds "that's safe to ski." Avalanche danger is life-safety information, issued by

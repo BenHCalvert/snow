@@ -6,6 +6,9 @@ import { colorFor } from "../metrics";
 
 // Free vector basemap, no API key: https://openfreemap.org
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
+// Free elevation tiles for shaded relief, no API key: https://registry.opendata.aws/terrain-tiles/
+const TERRAIN_TILES = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
+const MARKER_OUTLINE = "#1d2329";
 
 type Props = {
   hub: Hub;
@@ -27,6 +30,30 @@ export default function SnowMap({ hub, sites, metric, selected, onSelect }: Prop
     m.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     m.on("load", () => {
+      // Shaded relief sits under roads and labels so the mountains read without crowding the markers.
+      m.addSource("terrain", {
+        type: "raster-dem",
+        tiles: [TERRAIN_TILES],
+        encoding: "terrarium",
+        tileSize: 256,
+        maxzoom: 15,
+        attribution: '<a href="https://registry.opendata.aws/terrain-tiles/">Terrain Tiles</a> (USGS 3DEP, SRTM)',
+      });
+      const firstSymbol = m.getStyle().layers.find((l) => l.type === "symbol")?.id;
+      m.addLayer(
+        {
+          id: "hillshade",
+          type: "hillshade",
+          source: "terrain",
+          paint: {
+            "hillshade-exaggeration": 0.35,
+            "hillshade-shadow-color": "#5a5f66",
+            "hillshade-highlight-color": "#ffffff",
+            "hillshade-accent-color": "#5a5f66",
+          },
+        },
+        firstSymbol,
+      );
       m.addSource("sites", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
       m.addSource("hub", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
       m.addLayer({
@@ -37,8 +64,9 @@ export default function SnowMap({ hub, sites, metric, selected, onSelect }: Prop
           "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 5, 9, 10],
           "circle-color": ["get", "color"],
           "circle-opacity": ["case", ["get", "stale"], 0.35, 0.95],
-          "circle-stroke-width": ["case", ["get", "sel"], 3, 1],
-          "circle-stroke-color": ["case", ["get", "sel"], "#111", "#fff"],
+          "circle-stroke-width": ["case", ["get", "sel"], 3, 1.25],
+          "circle-stroke-color": MARKER_OUTLINE,
+          "circle-stroke-opacity": ["case", ["get", "stale"], 0.35, ["get", "sel"], 1, 0.75],
         },
       });
       m.addLayer({
