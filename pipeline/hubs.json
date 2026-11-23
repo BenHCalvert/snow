@@ -1,17 +1,20 @@
 [
   {"id": "boise", "name": "Boise, ID", "lat": 43.615, "lon": -116.202},
-  {"id": "ketchum", "name": "Ketchum, ID", "lat": 43.680, "lon": -114.364},
+  {"id": "ketchum", "name": "Ketchum, ID", "lat": 43.68, "lon": -114.364},
   {"id": "mccall", "name": "McCall, ID", "lat": 44.911, "lon": -116.098},
-  {"id": "slc", "name": "Salt Lake City, UT", "lat": 40.760, "lon": -111.891},
-  {"id": "jackson", "name": "Jackson, WY", "lat": 43.480, "lon": -110.762},
+  {"id": "slc", "name": "Salt Lake City, UT", "lat": 40.76, "lon": -111.891},
+  {"id": "jackson", "name": "Jackson, WY", "lat": 43.48, "lon": -110.762},
   {"id": "bozeman", "name": "Bozeman, MT", "lat": 45.677, "lon": -111.043},
   {"id": "missoula", "name": "Missoula, MT", "lat": 46.872, "lon": -113.994},
   {"id": "spokane", "name": "Spokane, WA", "lat": 47.659, "lon": -117.426},
   {"id": "seattle", "name": "Seattle, WA", "lat": 47.606, "lon": -122.332},
   {"id": "portland", "name": "Portland, OR", "lat": 45.515, "lon": -122.679},
   {"id": "bend", "name": "Bend, OR", "lat": 44.058, "lon": -121.315},
-  {"id": "reno", "name": "Reno, NV", "lat": 39.530, "lon": -119.814},
+  {"id": "reno", "name": "Reno, NV", "lat": 39.53, "lon": -119.814},
   {"id": "sacramento", "name": "Sacramento, CA", "lat": 38.582, "lon": -121.494},
-  {"id": "denver", "name": "Denver, CO", "lat": 39.739, "lon": -104.990},
-  {"id": "flagstaff", "name": "Flagstaff, AZ", "lat": 35.198, "lon": -111.651}
+  {"id": "denver", "name": "Denver, CO", "lat": 39.739, "lon": -104.99},
+  {"id": "flagstaff", "name": "Flagstaff, AZ", "lat": 35.198, "lon": -111.651},
+  {"id": "grandjunction", "name": "Grand Junction, CO", "lat": 39.064, "lon": -108.551},
+  {"id": "durango", "name": "Durango, CO", "lat": 37.275, "lon": -107.88},
+  {"id": "steamboat", "name": "Steamboat Springs, CO", "lat": 40.485, "lon": -106.832}
 ]
