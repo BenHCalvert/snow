@@ -77,8 +77,8 @@ def build(out_dir: pathlib.Path, states):
     (out_dir / "stations.json").write_text(json.dumps(records, separators=(",", ":")))
     hubs = json.loads((ROOT / "hubs.json").read_text())
     drive = json.loads((ROOT / "data" / "drive_times.json").read_text())
-    for h in hubs:
-        h["drive"] = drive.get(h["id"], {})
+    # A hub without drive times would show an empty map, so leave it out until build_drive_times.py has run.
+    hubs = [{**h, "drive": drive[h["id"]]} for h in hubs if h["id"] in drive]
     (out_dir / "hubs.json").write_text(json.dumps(hubs, separators=(",", ":")))
     (out_dir / "meta.json").write_text(json.dumps({
         "built": datetime.now(timezone.utc).isoformat(timespec="minutes"), "wy": wy,

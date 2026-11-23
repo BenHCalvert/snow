@@ -1,7 +1,9 @@
 """Precompute drive times from each hub city to every western SNOTEL station.
 
-Roads don't change often, so this runs by hand (not on the schedule) and the result is committed:
-    python3 pipeline/build_drive_times.py
+Roads don't change often, so this runs by hand (not on the schedule) and the result is committed.
+By default it only routes hubs missing from the output, so adding a city to hubs.json takes a minute or two:
+    python3 pipeline/build_drive_times.py          # new hubs only
+    python3 pipeline/build_drive_times.py --all    # rebuild every hub
 Output: pipeline/data/drive_times.json  ->  {hub_id: {triplet: hours}} (only stations <= MAX_HOURS)
 """
 import json
@@ -26,18 +28,23 @@ def miles(a, b):
 
 def main():
     hubs = json.loads((ROOT / "hubs.json").read_text())
+    path = ROOT / "data" / "drive_times.json"
+    out = {} if "--all" in sys.argv or not path.exists() else json.loads(path.read_text())
+    todo = [h for h in hubs if h["id"] not in out]
+    if not todo:
+        print("Every hub already has drive times. Use --all to rebuild.", file=sys.stderr)
+        return
     sts = [s for st in WESTERN_STATES for s in stations(st)]
-    print(f"{len(sts)} stations", file=sys.stderr)
-    out = {}
-    for hub in hubs:
+    print(f"{len(sts)} stations; routing {', '.join(h['id'] for h in todo)}", file=sys.stderr)
+    for hub in todo:
         origin = (hub["lat"], hub["lon"])
         near = [s for s in sts if miles(origin, (s["latitude"], s["longitude"])) <= PREFILTER_MI]
         hrs = drive_hours(origin, [(s["latitude"], s["longitude"]) for s in near])
         out[hub["id"]] = {s["stationTriplet"]: round(h, 2) for s, h in zip(near, hrs)
                           if h is not None and h <= MAX_HOURS}
         print(f"{hub['id']}: {len(out[hub['id']])} stations within {MAX_HOURS} h", file=sys.stderr)
-    (ROOT / "data").mkdir(exist_ok=True)
-    (ROOT / "data" / "drive_times.json").write_text(json.dumps(out, separators=(",", ":"), sort_keys=True))
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(out, separators=(",", ":"), sort_keys=True))
 
 
 if __name__ == "__main__":
