@@ -13,7 +13,5 @@
   {"id": "reno", "name": "Reno, NV", "lat": 39.530, "lon": -119.814},
   {"id": "sacramento", "name": "Sacramento, CA", "lat": 38.582, "lon": -121.494},
   {"id": "denver", "name": "Denver, CO", "lat": 39.739, "lon": -104.990},
-  {"id": "grandjunction", "name": "Grand Junction, CO", "lat": 39.064, "lon": -108.551},
-  {"id": "durango", "name": "Durango, CO", "lat": 37.275, "lon": -107.880},
   {"id": "flagstaff", "name": "Flagstaff, AZ", "lat": 35.198, "lon": -111.651}
 ]

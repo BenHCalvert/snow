@@ -36,7 +36,7 @@ don't account for *where the user is* or *how far they're willing to drive*.
 
 ## V1 scope (shipped)
 
-- Map + ranked list of SNOTEL sites within **1–8 hours' drive** of 17 mountain-west hub cities
+- Map + ranked list of SNOTEL sites within **1–8 hours' drive** of 15 mountain-west hub cities
 - Color/rank by **snow depth**, **3-day depth change**, or **% of median SWE**
 - Site detail: current stats + season SWE chart (this season vs. last season vs. 1991–2020 median)
 - Shareable URLs (`?from=boise&hours=3&metric=pctMed`)
